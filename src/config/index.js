@@ -27,7 +27,7 @@ const config = convict({
   serviceName: {
     doc: 'Applications Service Name',
     format: String,
-    default: 'CDP Node.js Frontend Template'
+    default: 'crai-cffld-feedback-web'
   },
   root: {
     doc: 'Project root',
