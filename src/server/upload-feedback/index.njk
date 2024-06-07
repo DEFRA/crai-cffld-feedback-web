@@ -9,7 +9,7 @@
 {% block content %}
   <h1 class="govuk-heading-l">Upload CFFLD Feedback</h1>
 
-  <form method="post">
+  <form method="post" enctype="multipart/form-data" novalidate="novalidate">
     {{ govukFileUpload({
       id: "feedback-upload",
       name: "feedbackUpload",

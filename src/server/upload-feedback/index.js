@@ -17,7 +17,17 @@ const feedbackUpload = {
         {
           method: 'POST',
           path: '/upload-feedback',
-          handler: feedbackUploadController.postHandler
+          handler: feedbackUploadController.postHandler,
+          options: {
+            payload: {
+              maxBytes: (50 * 1024 * 1024) + 250,
+              multipart: true,
+              timeout: false,
+              output: 'stream',
+              parse: true,
+              allow: 'multipart/form-data'
+            }
+          }
         }
       ])
     }

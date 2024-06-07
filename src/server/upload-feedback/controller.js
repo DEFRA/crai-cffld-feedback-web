@@ -1,5 +1,4 @@
-import { ListBucketsCommand } from "@aws-sdk/client-s3"
-import { buildS3Client } from "../common/helpers/s3-client"
+import { uploadFeedback } from '~/src/repos/feedback'
 
 /**
  * A GDS styled example home page controller.
@@ -10,7 +9,10 @@ const feedbackUploadController = {
     return h.view('upload-feedback/index')
   },
   postHandler: async (request, h) => {
-    console.log('File received')
+    const { feedbackUpload } = request.payload
+
+    await uploadFeedback(feedbackUpload._data)
+
     return h.redirect('/')
   }
 }
