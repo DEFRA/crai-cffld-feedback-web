@@ -2,6 +2,7 @@ import inert from '@hapi/inert'
 
 import { health } from '~/src/server/health'
 import { home } from '~/src/server/home'
+import { feedbackUpload } from '~/src/server/upload-feedback'
 import { serveStaticFiles } from '~/src/server/common/helpers/serve-static-files'
 import { about } from '~/src/server/about'
 
@@ -15,7 +16,7 @@ const router = {
       await server.register([health])
 
       // Application specific routes, add your own routes here
-      await server.register([home, about])
+      await server.register([home, about, feedbackUpload])
 
       // Static assets
       await server.register([serveStaticFiles])
