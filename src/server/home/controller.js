@@ -3,7 +3,7 @@
  * Provided as an example, remove or modify as required.
  */
 const homeController = {
-  handler: (request, h) => {
+  handler: async (request, h) => {
     return h.view('home/index', {
       pageTitle: 'Home',
       heading: 'Home'
