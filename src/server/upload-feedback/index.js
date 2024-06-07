@@ -20,7 +20,7 @@ const feedbackUpload = {
           handler: feedbackUploadController.postHandler,
           options: {
             payload: {
-              maxBytes: (50 * 1024 * 1024) + 250,
+              maxBytes: 50 * 1024 * 1024 + 250,
               multipart: true,
               timeout: false,
               output: 'stream',

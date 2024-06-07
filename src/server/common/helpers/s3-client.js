@@ -10,7 +10,7 @@ function buildS3Client() {
   client = new S3Client({
     region: 'eu-central-1'
   })
-    
+
   return client
 }
 

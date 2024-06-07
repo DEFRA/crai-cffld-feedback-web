@@ -9,7 +9,7 @@ async function uploadFeedback(file) {
   })
 
   const s3Client = buildS3Client()
-  
+
   try {
     await s3Client.send(command)
   } catch (err) {

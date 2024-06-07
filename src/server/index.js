@@ -14,7 +14,7 @@ const isProduction = config.get('isProduction')
 
 async function createServer() {
   console.log('Creating server')
-  
+
   const server = hapi.server({
     port: config.get('port'),
     routes: {
