@@ -6,53 +6,53 @@
     caption: "Core delivery platform Node.js Frontend Template."
   }) }}
 
-  {% call appPageBody() %}
-    <p>
-      Welcome to the Frontend Template, a starter kit for Core Delivery Platform Node.js Frontends 🚀
-    </p>
-    <p>
-      Based on <a href="https://github.com/DEFRA/design-standards">DEFRA</a> and <a
-              href="https://design-system.service.gov.uk/">GOV.UK</a> best practices this starter kit provides you with
-      a deployable, production ready template 🙌🏻 to start your new service with.
-    </p>
-
-    <ul>
-      <li>
-        <a href="https://frontend.design-system.service.gov.uk/">GOV.UK Frontend</a>
-      </li>
-      <li>
-        <a href="https://hapi.dev">Hapi</a>
-      </li>
-      <li>
-        <a href="https://mozilla.github.io/nunjucks/">Nunjucks</a>
-      </li>
-      <li>
-        <a href="https://github.com/mozilla/node-convict">Node Convict</a>
-      </li>
-      <li>
-        <a href="https://jestjs.io/">Jest testing</a>
-      </li>
-      <li>
-        <a href="https://webdriver.io">WebdriverIO</a> User Journey testing
-      </li>
-      <li>GitHub Actions Pull Request and Publish jobs</li>
-      <li>
-        <a href="https://github.com/pinojs/pino">PinoJs logging</a>
-      </li>
-      <li>
-        <a href="https://standardjs.com">Standard JS</a>
-      </li>
-      <li>
-        <a href="https://eslint.org">ESLint</a>
-      </li>
-      <li>
-        <a href="https://stylelint.io">StyleLint</a>
-      </li>
-      <li>
-        <a href="https://prettier.io">Prettier</a>
-      </li>
-      <li>and lots more... 😎</li>
-    </ul>
-  {% endcall %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <h1 class="govuk-heading-l">{{serviceName}}</h1>
+        <div class="govuk-cards govuk-cards--2">
+          <div class="govuk-cards--2__item govuk-card--dashboard">
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Urgent</h2>
+            <p class="govuk-hint">
+              Urgent feedback received in the last week
+            </p>
+            <p class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">
+              1
+            </p>
+            <ul class="govuk-list">
+              <li>
+                  <a href="/view/urgent" class="govuk-link">View</a>
+              </li>
+            </ul>
+          </div>
+          <div class="govuk-cards--2__item govuk-card--dashboard">
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Last week</h2>
+            <p class="govuk-hint">
+              Feedback received in the last week
+            </p>
+            <p class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">
+              10
+            </p>
+            <ul class="govuk-list">
+              <li>
+                  <a href="/view/all" class="govuk-link">View</a>
+              </li>
+            </ul>
+          </div>
+          <div class="govuk-cards--2__item govuk-card--dashboard">
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Recommendations</h2>
+            <p class="govuk-hint">
+              LLM suggested improvements to the service
+            </p>
+            <p class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">
+              3
+            </p>
+            <ul class="govuk-list">
+              <li>
+                  <a href="/reccomendations/all" class="govuk-link">View</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+    </div>
 
 {% endblock %}
