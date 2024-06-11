@@ -3,12 +3,11 @@
 {% block content %}
   {{ appHeading({
     text: heading,
-    caption: "Core delivery platform Node.js Frontend Template."
+    caption: "AI PoC for CFFLD Feedback Analysis"
   }) }}
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
-        <h1 class="govuk-heading-l">{{serviceName}}</h1>
         <div class="govuk-cards govuk-cards--2">
           <div class="govuk-cards--2__item govuk-card--dashboard">
             <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Urgent</h2>
@@ -16,7 +15,7 @@
               Urgent feedback received in the last week
             </p>
             <p class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">
-              1
+              {{ dashboard.urgent.weekly }}
             </p>
             <ul class="govuk-list">
               <li>
@@ -30,7 +29,7 @@
               Feedback received in the last week
             </p>
             <p class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">
-              10
+              {{ dashboard.feedback.weekly }}
             </p>
             <ul class="govuk-list">
               <li>
@@ -39,12 +38,12 @@
             </ul>
           </div>
           <div class="govuk-cards--2__item govuk-card--dashboard">
-            <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Recommendations</h2>
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-2">All time</h2>
             <p class="govuk-hint">
-              LLM suggested improvements to the service
+              All time total feedback received
             </p>
             <p class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">
-              3
+              {{ dashboard.feedback.allTime }}
             </p>
             <ul class="govuk-list">
               <li>

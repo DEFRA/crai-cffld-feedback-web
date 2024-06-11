@@ -45,6 +45,7 @@
     "@hapi/hapi": "21.3.9",
     "@hapi/inert": "7.1.0",
     "@hapi/vision": "7.0.3",
+    "@hapi/wreck": "18.1.0",
     "@hapi/yar": "11.0.2",
     "aws-embedded-metrics": "4.1.1",
     "babel-plugin-module-resolver": "5.0.0",
