@@ -1,6 +1,9 @@
-import { getAllFeedback, getFeedbackForLastWeek, getUrgentFeedbackForLastWeek } from "~/src/services/feedback"
-import { Dashboard } from "~/src/models/dashboard"
-
+import {
+  getAllFeedback,
+  getFeedbackForLastWeek,
+  getUrgentFeedbackForLastWeek
+} from '~/src/services/feedback'
+import { Dashboard } from '~/src/models/dashboard'
 
 /**
  * A GDS styled example home page controller.

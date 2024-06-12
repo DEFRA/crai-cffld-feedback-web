@@ -1,6 +1,6 @@
 import { config } from '~/src/config'
-import { post } from "./api-base"
-import { createLogger } from "./logging/logger"
+import { post } from './api-base'
+import { createLogger } from './logging/logger'
 
 const logger = createLogger()
 
@@ -17,4 +17,4 @@ async function graphqlQuery(payload) {
   }
 }
 
-export {graphqlQuery}
+export { graphqlQuery }

@@ -5,7 +5,7 @@ function getOptions(headers) {
     headers: {
       ...headers
     },
-    json: true 
+    json: true
   }
 }
 
@@ -53,9 +53,4 @@ async function del(url, json = true) {
   return payload
 }
 
-export {
-  get,
-  post,
-  put,
-  del
-}
+export { get, post, put, del }

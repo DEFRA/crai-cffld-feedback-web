@@ -21,7 +21,7 @@ async function getFeedback(params = {}) {
   const args = Object.entries(params)
     .map(([key, value]) => `${key}: ${value}`)
     .join(', ')
-  
+
   const queryArgs = args ? `(${args})` : ''
 
   const query = `{
@@ -50,7 +50,7 @@ async function getAllFeedback(params) {
 
 async function getFeedbackForLastWeek() {
   const params = {
-    from_date: `"${subWeeks(Date.now(), 1).toISOString()}"`,
+    from_date: `"${subWeeks(Date.now(), 1).toISOString()}"`
   }
 
   return getFeedback(params)
@@ -61,12 +61,8 @@ async function getUrgentFeedbackForLastWeek() {
     from_date: `"${subWeeks(Date.now(), 1).toISOString()}"`,
     urgent: true
   }
-  
+
   return getFeedback(params)
 }
 
-export {
-  getAllFeedback,
-  getFeedbackForLastWeek,
-  getUrgentFeedbackForLastWeek
-}
+export { getAllFeedback, getFeedbackForLastWeek, getUrgentFeedbackForLastWeek }
