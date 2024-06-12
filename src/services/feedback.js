@@ -1,8 +1,31 @@
-import { subWeeks } from "~/node_modules/date-fns/subWeeks"
-import { graphqlQuery } from "../server/common/helpers/feedback-api-client"
+import Joi from 'joi'
+import { subWeeks } from '~/node_modules/date-fns/subWeeks'
+import { graphqlQuery } from '../server/common/helpers/feedback-api-client'
 
-let query = `{
-    feedback {
+const paramsSchema = Joi.object({
+  from_date: Joi.string(),
+  to_date: Joi.string(),
+  urgent: Joi.boolean(),
+  category: Joi.string(),
+  sub_category: Joi.string(),
+  search: Joi.string()
+})
+
+async function getFeedback(params = {}) {
+  const { error } = paramsSchema.validate(params)
+
+  if (error) {
+    throw new Error(`Invalid GraphQL query parameters: ${error.message}`)
+  }
+
+  const args = Object.entries(params)
+    .map(([key, value]) => `${key}: ${value}`)
+    .join(', ')
+  
+  const queryArgs = args ? `(${args})` : ''
+
+  const query = `{
+    feedback${queryArgs} {
       qualtrics_id,
       date_time,
       comments,
@@ -14,47 +37,32 @@ let query = `{
     }
   }`
 
-async function getAllFeedback() {
   const { feedback } = await graphqlQuery(query)
+
+  return feedback
+}
+
+async function getAllFeedback(params) {
+  const feedback = await getFeedback(params)
+
   return feedback
 }
 
 async function getFeedbackForLastWeek() {
-  const fromDate = subWeeks(Date.now(), 1).toISOString()
-  const query = `{
-    feedback(from_date: "${fromDate}") {
-      qualtrics_id,
-      date_time,
-      comments,
-      llm_comments,
-      category,
-      sub_category,
-      key_points,
-      urgent
-    }
-  }`
+  const params = {
+    from_date: `"${subWeeks(Date.now(), 1).toISOString()}"`,
+  }
 
-  const { feedback } = await graphqlQuery(query)
-  return feedback
+  return getFeedback(params)
 }
 
 async function getUrgentFeedbackForLastWeek() {
-  const fromDate = subWeeks(Date.now(), 1).toISOString()
-  const query = `{
-    feedback(from_date: "${fromDate}", urgent: true) {
-      qualtrics_id,
-      date_time,
-      comments,
-      llm_comments,
-      category,
-      sub_category,
-      key_points,
-      urgent
-    }
-  }`
+  const params = {
+    from_date: `"${subWeeks(Date.now(), 1).toISOString()}"`,
+    urgent: true
+  }
   
-  const { feedback } = await graphqlQuery(query)
-  return feedback
+  return getFeedback(params)
 }
 
 export {

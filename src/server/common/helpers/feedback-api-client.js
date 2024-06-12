@@ -1,9 +1,10 @@
+import { config } from '~/src/config'
 import { post } from "./api-base"
 import { createLogger } from "./logging/logger"
 
 const logger = createLogger()
 
-const baseUrl = 'http://localhost:3000/feedback'
+const { baseUrl } = config.get('feedbackApi')
 
 async function graphqlQuery(payload) {
   const url = `${baseUrl}/query`
