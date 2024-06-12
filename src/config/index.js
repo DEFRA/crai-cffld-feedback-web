@@ -144,6 +144,14 @@ const config = convict({
       default: process.env.NODE_ENV !== 'production',
       env: 'USE_SINGLE_INSTANCE_CACHE'
     }
+  },
+  feedbackApi: {
+    url: {
+      doc: 'Feedback API URL',
+      format: String,
+      default: 'http://localhost:3000',
+      env: 'FEEDBACK_API_URL'
+    }
   }
 })
 
