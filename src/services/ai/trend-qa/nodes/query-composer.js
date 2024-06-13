@@ -1,16 +1,45 @@
-import { llm } from '~/src/services/ai/llm/bedrock'
-import { ChatPromptTemplate, SystemPromptTemplate } from '@langchain/core/prompts'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
 import { StringOutputParser } from '@langchain/core/output_parsers'
+
+import { llm } from '~/src/services/ai/llm/bedrock'
 
 const NAME = 'query_composer'
 
 const systemPrompt = `
 <persona>
 You are an expert in writing GraphQl queries. 
-Your task is to write a query using <graphql_schema> that will fetch data to answer user's question. 
+Your task is to write a query using <graphql_schema> that will fetch data to answer user's question. Do not include any propeties that are not in the schema.
 Do not respond with anything but the query body.
 You should only respond to queries for data. If the user asks for anything else or you are unable to construct a qeury, only return "Unable".
+You have also been provided with the current date (<current_date>) to help build the correct query.
 </persona>
+
+<current_date>
+{current_date}
+</current_date>
+
+<categories>
+'Data'
+'Bug'
+'Feature'
+'Incident'
+'Usability'
+'Spam'
+'Other'
+</valid_categories>
+
+<sub_categories>
+'Content'
+'Errors: spelling, dates, info'
+'Findability'
+'Forecasts/levels not provided'
+'Outdated Data'
+'Infrequent updates'
+'Map'
+'Other'
+'Personalisation'
+'Warning message'
+</sub_categories>
 
 <graphql_schema>
 type Query {{
@@ -37,19 +66,24 @@ type Feedback {{
 </graphql_schema>
 `
 
-function buildQAChain() {
+async function node(state) {
   const prompt = ChatPromptTemplate.fromMessages([
     ['system', systemPrompt],
     ['human', '{input}']
   ])
 
-  const chain = prompt
-    .pipe(llm)
-    .pipe(new StringOutputParser())
+  const { content: input } = state.messages[state.messages.length - 1]
 
-  return chain
+  const chain = prompt.pipe(llm).pipe(new StringOutputParser())
+
+  const res = await chain.invoke({
+    input,
+    current_date: state.current_date
+  })
+
+  return {
+    query: res
+  }
 }
 
-export {
-  buildQAChain
-}
+export { NAME, node }

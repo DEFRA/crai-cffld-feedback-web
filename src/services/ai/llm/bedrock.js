@@ -6,6 +6,4 @@ const llm = new BedrockChat({
   verbose: true
 })
 
-export {
-  llm
-}
+export { llm }

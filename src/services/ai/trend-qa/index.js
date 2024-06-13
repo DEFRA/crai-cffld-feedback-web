@@ -1,17 +1,57 @@
-import { graphqlQuery } from "~/src/server/common/helpers/feedback-api-client"
-import { buildQAChain } from "~/src/services/ai/trend-qa/chains/query-composer"
+import { END, START, StateGraph } from '@langchain/langgraph'
+import { HumanMessage } from '@langchain/core/messages'
 
-async function executeQa(message) {
-  const chain = buildQAChain()
+import * as queryComposer from './nodes/query-composer'
+import * as feedbackApi from './nodes/feedback-api'
+import * as trendSummary from './nodes/trend-summary'
+import validQueryRouter from './routers/valid-query'
 
-  const query = await chain.invoke({
-    input: message
+function buildGraph(state) {
+  const workflow = new StateGraph({
+    channels: state
   })
 
-  console.log(`Executing graphQl query: ${query}`)
-  const { feedback } = await graphqlQuery(query)
-  console.log(feedback)
-  return feedback
+  workflow
+    .addNode(queryComposer.NAME, queryComposer.node)
+    .addNode(feedbackApi.NAME, feedbackApi.node)
+    .addNode(trendSummary.NAME, trendSummary.node)
+
+  workflow
+    .addEdge(START, queryComposer.NAME)
+    .addEdge(feedbackApi.NAME, trendSummary.NAME)
+    .addEdge(trendSummary.NAME, END)
+    .addConditionalEdges(queryComposer.NAME, validQueryRouter)
+
+  return workflow.compile()
 }
 
-export { executeQa }
+async function feedbackQA(message) {
+  const state = {
+    messages: {
+      value: (x, y) => (x || []).concat(y || []),
+      default: () => []
+    },
+    current_date: '',
+    query: '',
+    feedback: ''
+  }
+
+  const graph = buildGraph(state)
+
+  const res = await graph.invoke({
+    messages: [new HumanMessage(message)],
+    current_date: new Date().toISOString()
+  })
+
+  const display = res.messages.map((m) => {
+    const prefix = m instanceof HumanMessage ? 'Human:' : 'System:'
+
+    return `${prefix} ${m.content}`
+  })
+
+  console.log(display.join('\n\n'))
+
+  return res
+}
+
+export { feedbackQA }
