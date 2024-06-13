@@ -1,7 +1,6 @@
 import { config } from '~/src/config'
 import { createServer } from '~/src/server'
 import { createLogger } from '~/src/server/common/helpers/logging/logger'
-import { executeGraph } from '~/src/services/ai/trend-qa'
 
 const logger = createLogger()
 
@@ -17,8 +16,6 @@ process.on('unhandledRejection', (error) => {
 async function startServer() {
   const server = await createServer()
   await server.start()
-
-  await executeGraph('How would you recommend we improve on UI feedback?')
 
   server.logger.info('Server started successfully')
   server.logger.info(

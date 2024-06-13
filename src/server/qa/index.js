@@ -1,4 +1,5 @@
 import { qaController } from '~/src/server/qa/controller'
+import Joi from 'joi'
 
 const qa = {
   plugin: {
@@ -13,7 +14,7 @@ const qa = {
         {
           method: 'POST',
           path: '/qa',
-          handler: qaController.postHandler
+          handler: qaController.postHandler          
         }
       ])
     }

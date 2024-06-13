@@ -2,9 +2,7 @@ import { END } from '@langchain/langgraph'
 import * as feedbackApi from '../nodes/feedback-api'
 
 function router(state) {
-  const { content } = state.messages[state.messages.length - 1]
-
-  if (content === 'Unable') {
+  if (state.query === 'Unable') {
     console.log(
       '[ValidQueryRouter] LLM was unable to generate a valid GraphQL query.'
     )

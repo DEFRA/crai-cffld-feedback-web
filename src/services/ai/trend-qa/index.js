@@ -25,7 +25,7 @@ function buildGraph(state) {
   return workflow.compile()
 }
 
-async function feedbackQA(message) {
+async function executeGraph(message) {
   const state = {
     messages: {
       value: (x, y) => (x || []).concat(y || []),
@@ -49,9 +49,9 @@ async function feedbackQA(message) {
     return `${prefix} ${m.content}`
   })
 
-  console.log(display.join('\n\n'))
+  console.log('Display: ', display.join('\n\n'))
 
   return res
 }
 
-export { feedbackQA }
+export { executeGraph }

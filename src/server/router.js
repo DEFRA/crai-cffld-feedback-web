@@ -3,8 +3,8 @@ import inert from '@hapi/inert'
 import { health } from '~/src/server/health'
 import { home } from '~/src/server/home'
 import { feedbackUpload } from '~/src/server/upload-feedback'
-import { serveStaticFiles } from '~/src/server/common/helpers/serve-static-files'
 import { qa } from '~/src/server/qa'
+import { serveStaticFiles } from '~/src/server/common/helpers/serve-static-files'
 
 const router = {
   plugin: {

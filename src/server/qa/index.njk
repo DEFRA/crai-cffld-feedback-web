@@ -1,9 +1,25 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 {% extends 'layouts/page.njk' %}
 
 {% block content %}
   {{ appHeading({
     text: heading,
-    caption: "Core delivery platform Node.js Frontend Template."
+    caption: "AI PoC for CFFLD Feedback Analysis"
   }) }}
+
+  <form method="post">
+    {{ govukInput({
+      label: {
+        text: "Your question about feedback"
+      },
+      id: "user-prompt",
+      name: "userPrompt"
+    }) }}
+      
+    {{ govukButton({
+      text: "Send"
+    }) }}
+  </form>
 
 {% endblock %}
