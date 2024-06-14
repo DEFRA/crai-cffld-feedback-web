@@ -1,5 +1,6 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% extends 'layouts/page.njk' %}
 
 {% block content %}
@@ -7,6 +8,8 @@
     text: heading,
     caption: "AI PoC for CFFLD Feedback Analysis"
   }) }}
+
+  {{ govukSummaryList({ rows: display }) }}
 
   <form method="post">
     {{ govukInput({

@@ -1,5 +1,4 @@
 import { qaController } from '~/src/server/qa/controller'
-import Joi from 'joi'
 
 const qa = {
   plugin: {

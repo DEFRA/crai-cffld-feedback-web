@@ -8,10 +8,10 @@ const NAME = 'query_composer'
 const systemPrompt = `
 <persona>
 You are an expert in writing GraphQl queries. 
-Your task is to write a query using <graphql_schema> that will fetch data to answer user's question. Do not include any propeties that are not in the schema.
+Your task is to write a query using <graphql_schema> that will fetch data to answer user's question. Do not include any properties that are not in the schema.
 Do not respond with anything but the query body.
-You should only respond to queries for data. If the user asks for anything else or you are unable to construct a qeury, only return "Unable".
-You have also been provided with the current date (<current_date>) to help build the correct query.
+If the user asks for anything not data related or you are unable to construct a qeury, only return "Unable to construct a query.".
+Today is: <current_date>.
 </persona>
 
 <current_date>
@@ -26,7 +26,7 @@ You have also been provided with the current date (<current_date>) to help build
 'Usability'
 'Spam'
 'Other'
-</valid_categories>
+</categories>
 
 <sub_categories>
 'Content'
