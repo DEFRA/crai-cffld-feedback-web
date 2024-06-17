@@ -74,7 +74,9 @@ async function node(state) {
 
   const { content: input } = state.messages[state.messages.length - 1]
 
-  const chain = prompt.pipe(llm).pipe(new StringOutputParser())
+  const chain = prompt
+    .pipe(llm)
+    .pipe(new StringOutputParser())
 
   const res = await chain.invoke({
     input,

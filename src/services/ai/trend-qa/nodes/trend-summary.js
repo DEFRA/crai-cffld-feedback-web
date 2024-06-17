@@ -1,4 +1,4 @@
-import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { ChatPromptTemplate, MessagesPlaceholder } from '@langchain/core/prompts'
 import { StringOutputParser } from '@langchain/core/output_parsers'
 import { AIMessage } from '@langchain/core/messages'
 
@@ -44,7 +44,8 @@ async function node(state) {
 
   const { content: input } = state.messages[state.messages.length - 1]
 
-  const chain = prompt.pipe(llm).pipe(new StringOutputParser())
+  const chain = prompt.pipe(llm)
+    .pipe(new StringOutputParser())
 
   const res = await chain.invoke({
     input,
@@ -53,8 +54,13 @@ async function node(state) {
     query: state.query
   })
 
+  const message = new AIMessage(res, {
+    query: state.query,
+    feedback: state.feedback
+  })
+
   return {
-    messages: [new AIMessage(res)]
+    messages: [message]
   }
 }
 

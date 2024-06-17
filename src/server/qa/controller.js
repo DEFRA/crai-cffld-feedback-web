@@ -1,48 +1,28 @@
 import { executeGraph } from "~/src/services/ai/trend-qa/index"
-import { HumanMessage } from '@langchain/core/messages'
+import { QaModel } from '~/src/models/qa'
 
 const qaController = {
   getHandler: async (request, h) => {
-    return h.view('qa/index', {
-      pageTitle: 'Q&A',
-      heading: 'CFFLD Feedback Q&A'
-    })
-  },
-  postHandler: async (request, h) => {
-    const userPrompt = request.payload.userPrompt
-    const { messages, query } = await executeGraph(userPrompt)
+    const messages = request.yar.get('qa-messages') ?? []
 
-    let display = []
-
-    messages.map((message) => {
-      const keyName = message instanceof HumanMessage ? 'User:' : 'System:'
-  
-      display.push({
-        key: {
-          text: keyName
-        },
-        value: {
-          html: message.content.replace(/\n/g, '<br>')
-        }
-      })
-    })
-
-    if (query.includes('Unable to construct a query')) {
-      display.push({
-        key: {
-          text: 'System:'
-        },
-        value: {
-          html: query
-        }
-      })
-    }
+    const qa = new QaModel(messages)
 
     return h.view('qa/index', {
       pageTitle: 'Q&A',
       heading: 'CFFLD Feedback Q&A',
-      display: display
+      qa
     })
+  },
+  postHandler: async (request, h) => {
+    const userPrompt = request.payload.userPrompt
+
+    const prevMessages = request.yar.get('qa-messages') ?? []
+
+    const { messages } = await executeGraph(userPrompt, prevMessages)
+
+    request.yar.set('qa-messages', [...prevMessages, ...messages])
+
+    return h.redirect('/qa')
   }
 }
 

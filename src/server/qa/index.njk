@@ -9,7 +9,31 @@
     caption: "AI PoC for CFFLD Feedback Analysis"
   }) }}
 
-  {{ govukSummaryList({ rows: display }) }}
+  <dl class="govuk-summary-list">
+    {% for message in qa.messages %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">{{ message.user }}</dt>
+        <dd class="govuk-summary-list__value">
+          {% for line in message.content %}
+            {{ line }}<br>
+          {% endfor %}
+        </dd>
+      </div>
+
+      {% if message.user == "System" %}
+        <details class="govuk-details">
+          <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">
+              GraphQL Query
+            </span>
+          </summary>
+          <div class="govuk-details__text">
+            <pre>{{ message.query }}</pre>
+          </div>
+        </details>
+      {% endif %}
+    {% endfor %}
+  </dl>
 
   <form method="post">
     {{ govukInput({

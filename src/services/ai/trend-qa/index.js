@@ -1,5 +1,5 @@
 import { END, START, StateGraph } from '@langchain/langgraph'
-import { HumanMessage } from '@langchain/core/messages'
+import { HumanMessage, AIMessage } from '@langchain/core/messages'
 
 import * as queryComposer from './nodes/query-composer'
 import * as feedbackApi from './nodes/feedback-api'
@@ -25,8 +25,11 @@ function buildGraph(state) {
   return workflow.compile()
 }
 
-async function executeGraph(message) {
+async function executeGraph(message, prevMessages) {
   const state = {
+    chat_history: {
+
+    },
     messages: {
       value: (x, y) => (x || []).concat(y || []),
       default: () => []
@@ -39,6 +42,15 @@ async function executeGraph(message) {
   const graph = buildGraph(state)
 
   const response = await graph.invoke({
+    chat_history: prevMessages.map(m => {
+      if (m.id[2] === 'HumanMessage') {
+        return new HumanMessage(m.kwargs.content)
+      }
+
+      return new AIMessage(m.kwargs.content, {
+        query: m.kwargs.additional_kwargs.query,
+      })
+    }),
     messages: [new HumanMessage(message)],
     current_date: new Date().toISOString()
   })
