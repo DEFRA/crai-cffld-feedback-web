@@ -1,8 +1,8 @@
-import { ChatPromptTemplate, MessagesPlaceholder } from '@langchain/core/prompts'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
 import { StringOutputParser } from '@langchain/core/output_parsers'
 import { AIMessage } from '@langchain/core/messages'
 
-import { llm } from '~/src/services/ai/llm/bedrock'
+import { haiku } from '~/src/services/ai/llm/bedrock'
 
 const NAME = 'trend_summary'
 
@@ -42,13 +42,11 @@ async function node(state) {
     ['human', '{input}']
   ])
 
-  const { content: input } = state.messages[state.messages.length - 1]
-
-  const chain = prompt.pipe(llm)
+  const chain = prompt.pipe(haiku)
     .pipe(new StringOutputParser())
 
   const res = await chain.invoke({
-    input,
+    input: state.input,
     user_feedback: JSON.stringify(state.feedback),
     current_date: state.current_date,
     query: state.query

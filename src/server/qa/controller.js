@@ -3,7 +3,7 @@ import { QaModel } from '~/src/models/qa'
 
 const qaController = {
   getHandler: async (request, h) => {
-    const messages = request.yar.get('qa-messages') ?? []
+    const messages = request.yar.get('qa-history') ?? []
 
     const qa = new QaModel(messages)
 
@@ -14,13 +14,19 @@ const qaController = {
     })
   },
   postHandler: async (request, h) => {
+    if (request.payload.reset) {
+      request.yar.clear('qa-history')
+
+      return h.redirect('/qa')
+    }
+
     const userPrompt = request.payload.userPrompt
 
-    const prevMessages = request.yar.get('qa-messages') ?? []
+    const history = request.yar.get('qa-history') ?? []
 
-    const { messages } = await executeGraph(userPrompt, prevMessages)
+    const { messages } = await executeGraph(userPrompt, history)
 
-    request.yar.set('qa-messages', [...prevMessages, ...messages])
+    request.yar.set('qa-history', [...history, ...messages])
 
     return h.redirect('/qa')
   }

@@ -1,6 +1,6 @@
 class QaModel {
   constructor(messages) {
-    this.messages = messages.map(m => {
+    this.messages = messages.map((m, index) => {
       const user = m.id[2] === 'HumanMessage' ? 'User' : 'System'
 
       const { kwargs } = m
@@ -11,7 +11,8 @@ class QaModel {
       return {
         user,
         content,
-        query
+        query,
+        index
       }
     })
   }

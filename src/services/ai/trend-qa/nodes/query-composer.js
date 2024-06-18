@@ -1,16 +1,27 @@
 import { ChatPromptTemplate } from '@langchain/core/prompts'
 import { StringOutputParser } from '@langchain/core/output_parsers'
 
-import { llm } from '~/src/services/ai/llm/bedrock'
+import { sonnet } from '~/src/services/ai/llm/bedrock'
 
 const NAME = 'query_composer'
 
 const systemPrompt = `
 <persona>
 You are an expert in writing GraphQl queries. 
-Your task is to write a query using <graphql_schema> that will fetch data to answer user's question. Do not include any properties that are not in the schema.
-Do not respond with anything but the query body.
-If the user asks for anything not data related or you are unable to construct a qeury, only return "Unable to construct a query.".
+Your task is to write a query using <graphql_schema> that will fetch data to answer the user's question.
+
+You must only use the filter options described in '<graphql_schema>/<filter>' for the query. You MUST not use any other filters.
+
+You must only use the categories, rating_summary and sub_category filters if the user has explicitly provided suitable criteria in their question. If you don't have any criteria for these filters, leave them out of the query.
+
+Filtering is optional. If the user provides little to no filtering, you should still construct a valid query that fetches all feedback data.
+
+You must only request the fields described in '<graphql_schema>/<type>' for the query. You must not request any other fields.
+
+Do not respond with anything but the query body. Always start with 'query'.
+
+If the user asks for anything not data related or you are unable to construct a query, return "Unable to construct a query." with a explanation of why you are unable to construct a query.
+
 Today is: <current_date>.
 </persona>
 
@@ -42,27 +53,39 @@ Today is: <current_date>.
 </sub_categories>
 
 <graphql_schema>
+<filter>
+  - from_date: String
+  - to_date: String
+  - categories: [String]
+  - sub_categories: [String]
+  - rating_summary: [String]
+  - urgent: Boolean
+</filter>
+<query>
 type Query {{
-    feedback(from_date: String, to_date: String, categories: [String], sub_categories: [String], rating_summary: [String], urgent: Boolean): [Feedback]
+  feedback(from_date: String, to_date: String, categories: [String], sub_categories: [String], rating_summary: [String], urgent: Boolean): [Feedback]
 }}
+</query>
+<type>
 type Feedback {{
-    qualtrics_id: String!
-    urgent: Boolean
-    date_time: String
-    duration: Int
-    key_points: [String]
-    operating_system: String
-    screen_size: String
-    rating: String
-    is_flood_risk_area: String
-    is_station_issue: String
-    rating_summary: String
-    comments: String!
-    category: String
-    sub_category: String
-    llm_comments: String
-    originating_service: String
+  qualtrics_id: String!
+  urgent: Boolean
+  date_time: String
+  duration: Int
+  key_points: [String]
+  operating_system: String
+  screen_size: String
+  rating: String
+  is_flood_risk_area: String
+  is_station_issue: String
+  rating_summary: String
+  comments: String!
+  category: String
+  sub_category: String
+  llm_comments: String
+  originating_service: String
 }}
+</type>
 </graphql_schema>
 `
 
@@ -72,14 +95,12 @@ async function node(state) {
     ['human', '{input}']
   ])
 
-  const { content: input } = state.messages[state.messages.length - 1]
-
   const chain = prompt
-    .pipe(llm)
+    .pipe(sonnet)
     .pipe(new StringOutputParser())
 
   const res = await chain.invoke({
-    input,
+    input: state.input,
     current_date: state.current_date
   })
 
