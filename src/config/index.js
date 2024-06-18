@@ -146,10 +146,10 @@ const config = convict({
     }
   },
   feedbackApi: {
-    url: {
+    baseUrl: {
       doc: 'Feedback API URL',
       format: String,
-      default: 'http://localhost:3000',
+      default: 'http://localhost:3000/feedback',
       env: 'FEEDBACK_API_URL'
     }
   }
