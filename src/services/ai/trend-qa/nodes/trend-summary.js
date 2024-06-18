@@ -42,8 +42,7 @@ async function node(state) {
     ['human', '{input}']
   ])
 
-  const chain = prompt.pipe(haiku)
-    .pipe(new StringOutputParser())
+  const chain = prompt.pipe(haiku).pipe(new StringOutputParser())
 
   const res = await chain.invoke({
     input: state.input,

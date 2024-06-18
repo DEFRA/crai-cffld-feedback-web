@@ -32,9 +32,7 @@ You have also been provided with the current date (<current_date>).
 async function summariseFeedback(feedback) {
   const prompt = ChatPromptTemplate.fromTemplate(systemPrompt)
 
-  const chain = prompt
-    .pipe(haiku)
-    .pipe(new StringOutputParser())
+  const chain = prompt.pipe(haiku).pipe(new StringOutputParser())
 
   const res = await chain.invoke({
     user_feedback: JSON.stringify(feedback),

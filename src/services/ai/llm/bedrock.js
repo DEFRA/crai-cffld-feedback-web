@@ -10,7 +10,4 @@ const sonnet = new BedrockChat({
   region: 'eu-central-1'
 })
 
-export {
-  haiku,
-  sonnet
-}
+export { haiku, sonnet }

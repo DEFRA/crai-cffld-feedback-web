@@ -1,4 +1,4 @@
-import { executeGraph } from "~/src/services/ai/trend-qa/index"
+import { executeGraph } from '~/src/services/ai/trend-qa/index'
 import { QaModel } from '~/src/models/qa'
 
 const qaController = {

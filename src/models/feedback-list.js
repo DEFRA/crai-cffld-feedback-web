@@ -1,4 +1,4 @@
-import { format } from "date-fns/format"
+import { format } from 'date-fns/format'
 
 const dateFormat = 'dd MMMM yyyy hh:mm a'
 
@@ -7,16 +7,25 @@ class FeedbackListModel {
     this.summary = summary.split(/\n/g)
 
     this.feedback = feedback.map((f) => {
-      const { qualtrics_id, date_time, comments, llm_comments, category, sub_category, key_points, urgent } = f
+      const {
+        qualtrics_id: qualtricsId,
+        date_time: dateTime,
+        comments,
+        llm_comments: llmComments,
+        category,
+        sub_category: subCategory,
+        key_points: keyPoints,
+        urgent
+      } = f
 
       return {
-        qualtrics_id,
-        date_time: format(new Date(date_time), dateFormat),
+        qualtricsId,
+        dateTime: format(new Date(dateTime), dateFormat),
         comments,
-        llm_comments,
+        llmComments,
         category,
-        sub_category,
-        key_points,
+        subCategory,
+        keyPoints,
         urgent
       }
     })

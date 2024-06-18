@@ -59,7 +59,9 @@ async function getFeedback(params = {}) {
 
   const { feedback } = await graphqlQuery(query)
 
-  const sorted = feedback.sort((a, b) => new Date(b.date_time) - new Date(a.date_time))
+  const sorted = feedback.sort(
+    (a, b) => new Date(b.date_time) - new Date(a.date_time)
+  )
 
   return sorted
 }

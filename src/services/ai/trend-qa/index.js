@@ -53,16 +53,16 @@ async function executeGraph(message, history) {
 
   const graph = buildGraph(state)
 
+  const chatHistory = history
+    .filter((m) => m.id[2] === 'HumanMessage')
+    .map((m) => new HumanMessage(m.kwargs.content))
+
   const response = await graph.invoke({
-    chat_history: history.map(m => {
-      if (m.id[2] === 'HumanMessage') {
-        return new HumanMessage(m.kwargs.content)
-      }
-    }),
+    chat_history: chatHistory,
     messages: [new HumanMessage(message)],
     current_date: new Date().toISOString()
   })
-  
+
   return response
 }
 
