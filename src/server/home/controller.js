@@ -1,8 +1,4 @@
-import {
-  getAllFeedback,
-  getFeedbackForLastWeek,
-  getUrgentFeedbackForLastWeek
-} from '~/src/services/feedback'
+import { getAllFeedback, getFeedbackForLastWeek } from '~/src/services/feedback'
 import { Dashboard } from '~/src/models/dashboard'
 
 /**
@@ -11,7 +7,7 @@ import { Dashboard } from '~/src/models/dashboard'
  */
 const homeController = {
   handler: async (request, h) => {
-    const urgentFeedback = await getUrgentFeedbackForLastWeek()
+    const urgentFeedback = await getFeedbackForLastWeek({ urgent: true })
     const feedback = await getFeedbackForLastWeek()
     const allFeedback = await getAllFeedback()
 

@@ -11,8 +11,28 @@ const paramsSchema = Joi.object({
   search: Joi.string()
 })
 
+function formatParams(params) {
+  const parsed = {}
+
+  const keys = ['from_date', 'to_date', 'category', 'sub_category', 'search']
+
+  for (const key of keys) {
+    if (params?.[key]) {
+      parsed[key] = `"${params[key]}"`
+    }
+  }
+
+  if (params?.urgent) {
+    parsed.urgent = params.urgent
+  }
+
+  return parsed
+}
+
 async function getFeedback(params = {}) {
-  const { error } = paramsSchema.validate(params)
+  const { error } = paramsSchema.validate(params, {
+    abortEarly: false
+  })
 
   if (error) {
     throw new Error(`Invalid GraphQL query parameters: ${error.message}`)
@@ -39,30 +59,27 @@ async function getFeedback(params = {}) {
 
   const { feedback } = await graphqlQuery(query)
 
-  return feedback
+  const sorted = feedback.sort((a, b) => new Date(b.date_time) - new Date(a.date_time))
+
+  return sorted
 }
 
 async function getAllFeedback(params) {
-  const feedback = await getFeedback(params)
+  const parsed = formatParams(params)
+
+  const feedback = await getFeedback(parsed)
 
   return feedback
 }
 
-async function getFeedbackForLastWeek() {
-  const params = {
-    from_date: `"${subWeeks(Date.now(), 1).toISOString()}"`
-  }
+async function getFeedbackForLastWeek(params) {
+  const feedback = await getAllFeedback({
+    from_date: subWeeks(Date.now(), 1).toISOString(),
+    to_date: new Date().toISOString(),
+    ...params
+  })
 
-  return getFeedback(params)
+  return feedback
 }
 
-async function getUrgentFeedbackForLastWeek() {
-  const params = {
-    from_date: `"${subWeeks(Date.now(), 1).toISOString()}"`,
-    urgent: true
-  }
-
-  return getFeedback(params)
-}
-
-export { getAllFeedback, getFeedbackForLastWeek, getUrgentFeedbackForLastWeek }
+export { getAllFeedback, getFeedbackForLastWeek }

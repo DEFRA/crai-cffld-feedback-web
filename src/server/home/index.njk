@@ -19,7 +19,7 @@
             </p>
             <ul class="govuk-list">
               <li>
-                  <a href="/get-feedback/urgent" class="govuk-link">View</a>
+                  <a href="/feedback?urgent=true&from_date={{ dashboard.weekQuery.fromDate }}&to_date={{ dashboard.weekQuery.toDate }}" class="govuk-link">View</a>
               </li>
             </ul>
           </div>
@@ -33,7 +33,7 @@
             </p>
             <ul class="govuk-list">
               <li>
-                  <a href="/get-feedback/week" class="govuk-link">View</a>
+                  <a href="/feedback?from_date={{ dashboard.weekQuery.fromDate }}&to_date={{ dashboard.weekQuery.toDate }}" class="govuk-link">View</a>
               </li>
             </ul>
           </div>
@@ -47,7 +47,7 @@
             </p>
             <ul class="govuk-list">
               <li>
-                  <a href="/get-feedback/all" class="govuk-link">View</a>
+                  <a href="/feedback" class="govuk-link">View</a>
               </li>
             </ul>
           </div>

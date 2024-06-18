@@ -58,10 +58,6 @@ async function executeGraph(message, history) {
       if (m.id[2] === 'HumanMessage') {
         return new HumanMessage(m.kwargs.content)
       }
-
-      return new AIMessage(m.kwargs.content, {
-        query: m.kwargs.query
-      })
     }),
     messages: [new HumanMessage(message)],
     current_date: new Date().toISOString()
