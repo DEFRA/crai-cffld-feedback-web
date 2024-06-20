@@ -1,6 +1,8 @@
 import Joi from 'joi'
-import { subWeeks } from '~/node_modules/date-fns/subWeeks'
-import { graphqlQuery } from '../server/common/helpers/feedback-api-client'
+import { subWeeks, format } from 'date-fns'
+import { getFeedbackMetadata, graphqlQuery } from '~/src/server/common/helpers/feedback-api-client'
+
+const dateFormat = 'dd MMMM yyyy hh:mm a'
 
 const paramsSchema = Joi.object({
   from_date: Joi.string(),
@@ -27,6 +29,26 @@ function formatParams(params) {
   }
 
   return parsed
+}
+
+function formatFeedback(feedback) {
+  return {
+    qualtricsId: feedback.qualtrics_id,
+    dateTime: format(new Date(feedback.date_time), dateFormat),
+    comments: feedback.comments,
+    llmComments: feedback.llm_comments,
+    category: feedback.category,
+    subCategory: feedback.sub_category,
+    keyPoints: feedback.key_points,
+    urgent: feedback.urgent
+  }
+}
+
+function formatMetadata(metadata) {
+  return {
+    ...metadata,
+    dateTime: format(new Date(metadata.id), dateFormat)
+  }
 }
 
 async function getFeedback(params = {}) {
@@ -63,7 +85,9 @@ async function getFeedback(params = {}) {
     (a, b) => new Date(b.date_time) - new Date(a.date_time)
   )
 
-  return sorted
+  const mapped = sorted.map(formatFeedback)
+
+  return mapped
 }
 
 async function getAllFeedback(params) {
@@ -72,6 +96,12 @@ async function getAllFeedback(params) {
   const feedback = await getFeedback(parsed)
 
   return feedback
+}
+
+async function getMetadata() {
+  const metadata = await getFeedbackMetadata()
+
+  return metadata.map(formatMetadata)
 }
 
 async function getFeedbackForLastWeek(params) {
@@ -84,4 +114,9 @@ async function getFeedbackForLastWeek(params) {
   return feedback
 }
 
-export { getAllFeedback, getFeedbackForLastWeek }
+export {
+  getAllFeedback,
+  getMetadata,
+  getFeedbackForLastWeek,
+  formatFeedback
+}

@@ -7,6 +7,7 @@ import { feedback } from '~/src/server/feedback'
 import { qa } from '~/src/server/qa'
 import { query } from '~/src/server/query'
 import { serveStaticFiles } from '~/src/server/common/helpers/serve-static-files'
+import { feedbackStatus } from '~/src/server/feedback-upload-status'
 
 const router = {
   plugin: {
@@ -18,7 +19,7 @@ const router = {
       await server.register([health])
 
       // Application specific routes, add your own routes here
-      await server.register([home, qa, feedbackUpload, feedback, query])
+      await server.register([home, qa, feedbackUpload, feedback, query, feedbackStatus])
 
       // Static assets
       await server.register([serveStaticFiles])

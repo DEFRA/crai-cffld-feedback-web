@@ -149,7 +149,7 @@ const config = convict({
     baseUrl: {
       doc: 'Feedback API URL',
       format: String,
-      default: 'http://localhost:3000/feedback',
+      default: 'http://localhost:3001/feedback',
       env: 'FEEDBACK_API_URL'
     }
   }

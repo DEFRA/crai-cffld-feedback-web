@@ -7,12 +7,12 @@ const feedbackUpload = {
       server.route([
         {
           method: 'GET',
-          path: '/upload-feedback',
+          path: '/feedback/upload',
           handler: feedbackUploadController.getHandler
         },
         {
           method: 'POST',
-          path: '/upload-feedback',
+          path: '/feedback/upload',
           handler: feedbackUploadController.postHandler,
           options: {
             payload: {

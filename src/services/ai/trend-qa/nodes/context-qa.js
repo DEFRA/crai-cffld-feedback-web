@@ -54,7 +54,9 @@ async function node(state) {
     ['human', '{input}']
   ])
 
-  const chain = prompt.pipe(sonnet).pipe(new StringOutputParser())
+  const chain = prompt
+    .pipe(sonnet)
+    .pipe(new StringOutputParser())
 
   const res = await chain.invoke({
     chat_history: JSON.stringify(state.chat_history),
