@@ -10,10 +10,10 @@
   }) }}
 
   <h2 class="govuk-heading-m">GraphQL Query</h2>
-  <pre>{{ query }}</pre>
+  <pre>{{ model.query }}</pre>
 
   <h2 class="govuk-heading-m">Feedback</h2>
-  {% for f in feedback %}
+  {% for f in model.feedback %}
   <div class="govuk-summary-card">
     <div class="govuk-summary-card__title-wrapper">
       <h3 class="govuk-summary-card__title">Feedback</h3>

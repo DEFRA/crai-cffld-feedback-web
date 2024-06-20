@@ -12,8 +12,8 @@ function buildNavigation(request) {
     },
     {
       text: 'Upload Feedback',
-      url: '/upload-feedback',
-      isActive: request.path === '/upload-feedback'
+      url: '/feedback/upload',
+      isActive: request.path === '/feedback/upload'
     }
   ]
 }

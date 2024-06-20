@@ -13,7 +13,7 @@ const feedbackUploadController = {
 
     await uploadFeedback(feedbackUpload._data)
 
-    return h.redirect('/')
+    return h.redirect('/feedback/upload/status')
   }
 }
 

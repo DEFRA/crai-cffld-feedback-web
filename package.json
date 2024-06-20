@@ -1,6 +1,6 @@
 {
   "name": "crai-cffld-feedback-web",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "CDP Frontend Template",
   "main": "src/index.js",
   "engines": {

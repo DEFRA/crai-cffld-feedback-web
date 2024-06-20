@@ -1,3 +1,5 @@
+import { QueryModel } from "~/src/models/query"
+
 const queryController = {
   getHandler: async (request, h) => {
     const { messageNo } = request.params
@@ -10,11 +12,12 @@ const queryController = {
 
     const { query, feedback } = message.kwargs.additional_kwargs
 
+    const model = new QueryModel(query, feedback)
+
     return h.view('query/index', {
       pageTitle: 'GraphQL Response',
       heading: 'CFFLD Feedback Q&A',
-      query,
-      feedback
+      model
     })
   }
 }

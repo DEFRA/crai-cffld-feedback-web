@@ -1,20 +1,18 @@
 import { config } from '~/src/config'
-import { post } from './api-base'
-import { createLogger } from './logging/logger'
-
-const logger = createLogger()
+import { get, post } from './api-base'
 
 const { baseUrl } = config.get('feedbackApi')
 
 async function graphqlQuery(payload) {
   const url = `${baseUrl}/query`
 
-  try {
-    return post(url, payload)
-  } catch (err) {
-    logger.error(err)
-    throw err
-  }
+  return post(url, payload)
 }
 
-export { graphqlQuery }
+async function getFeedbackMetadata() {
+  const url = `${baseUrl}/metadata`
+
+  return get(url)
+}
+
+export { graphqlQuery, getFeedbackMetadata }

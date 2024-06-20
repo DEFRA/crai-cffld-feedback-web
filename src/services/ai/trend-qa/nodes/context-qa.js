@@ -9,6 +9,8 @@ const systemPrompt = `
 <instruction>
 Given a chat history (<chat_history>) and the latest user question, formulate a standalone question that can be understood without the context of the chat history.
 
+If the user asks a different question unrelated to the chat history, return the user's question as is without any changes.
+
 Do not:
 - Ask for clarification
 - Ask for more information
@@ -21,8 +23,17 @@ Do:
 - Formulate a standalone question that can be understood without the context of the chat history
 - Return only the question as your response
 - If you are unable to formulate a question, return the user's question as is without any changes
-- Ensure filters are included in the question if the user has provided them unless the user has asked a new question with different filters
+- Ensure filters are maintained if the user has provided them in <chat_history>
 </instruction>
+
+<example>
+If the user has asked in the last two messages from chat history:
+- What was the feedback in June 2024?
+- What would you recommend changing?
+
+Your response should be:
+What changes would you recommend for the feedback in June 2024?
+</example>
 
 <chat_history>
 {chat_history}

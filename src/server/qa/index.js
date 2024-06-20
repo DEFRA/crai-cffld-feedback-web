@@ -13,7 +13,7 @@ const qa = {
         {
           method: 'POST',
           path: '/qa',
-          handler: qaController.postHandler          
+          handler: qaController.postHandler
         }
       ])
     }

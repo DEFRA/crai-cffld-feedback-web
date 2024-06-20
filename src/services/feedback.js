@@ -1,6 +1,8 @@
 import Joi from 'joi'
-import { subWeeks } from '~/node_modules/date-fns/subWeeks'
-import { graphqlQuery } from '../server/common/helpers/feedback-api-client'
+import { subWeeks, format } from 'date-fns'
+import { getFeedbackMetadata, graphqlQuery } from '~/src/server/common/helpers/feedback-api-client'
+
+const dateFormat = 'dd MMMM yyyy hh:mm a'
 
 const paramsSchema = Joi.object({
   from_date: Joi.string(),
@@ -11,8 +13,48 @@ const paramsSchema = Joi.object({
   search: Joi.string()
 })
 
+function formatParams(params) {
+  const parsed = {}
+
+  const keys = ['from_date', 'to_date', 'category', 'sub_category', 'search']
+
+  for (const key of keys) {
+    if (params?.[key]) {
+      parsed[key] = `"${params[key]}"`
+    }
+  }
+
+  if (params?.urgent) {
+    parsed.urgent = params.urgent
+  }
+
+  return parsed
+}
+
+function formatFeedback(feedback) {
+  return {
+    qualtricsId: feedback.qualtrics_id,
+    dateTime: format(new Date(feedback.date_time), dateFormat),
+    comments: feedback.comments,
+    llmComments: feedback.llm_comments,
+    category: feedback.category,
+    subCategory: feedback.sub_category,
+    keyPoints: feedback.key_points,
+    urgent: feedback.urgent
+  }
+}
+
+function formatMetadata(metadata) {
+  return {
+    ...metadata,
+    dateTime: format(new Date(metadata.id), dateFormat)
+  }
+}
+
 async function getFeedback(params = {}) {
-  const { error } = paramsSchema.validate(params)
+  const { error } = paramsSchema.validate(params, {
+    abortEarly: false
+  })
 
   if (error) {
     throw new Error(`Invalid GraphQL query parameters: ${error.message}`)
@@ -39,30 +81,42 @@ async function getFeedback(params = {}) {
 
   const { feedback } = await graphqlQuery(query)
 
-  return feedback
+  const sorted = feedback.sort(
+    (a, b) => new Date(b.date_time) - new Date(a.date_time)
+  )
+
+  const mapped = sorted.map(formatFeedback)
+
+  return mapped
 }
 
 async function getAllFeedback(params) {
-  const feedback = await getFeedback(params)
+  const parsed = formatParams(params)
+
+  const feedback = await getFeedback(parsed)
 
   return feedback
 }
 
-async function getFeedbackForLastWeek() {
-  const params = {
-    from_date: `"${subWeeks(Date.now(), 1).toISOString()}"`
-  }
+async function getMetadata() {
+  const metadata = await getFeedbackMetadata()
 
-  return getFeedback(params)
+  return metadata.map(formatMetadata)
 }
 
-async function getUrgentFeedbackForLastWeek() {
-  const params = {
-    from_date: `"${subWeeks(Date.now(), 1).toISOString()}"`,
-    urgent: true
-  }
+async function getFeedbackForLastWeek(params) {
+  const feedback = await getAllFeedback({
+    from_date: subWeeks(Date.now(), 1).toISOString(),
+    to_date: new Date().toISOString(),
+    ...params
+  })
 
-  return getFeedback(params)
+  return feedback
 }
 
-export { getAllFeedback, getFeedbackForLastWeek, getUrgentFeedbackForLastWeek }
+export {
+  getAllFeedback,
+  getMetadata,
+  getFeedbackForLastWeek,
+  formatFeedback
+}
