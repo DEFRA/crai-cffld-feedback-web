@@ -46,9 +46,9 @@ async function createServer() {
     ]
   })
 
-  // if (isProduction) {
-  //   await server.register(secureContext)
-  // }
+  if (isProduction) {
+    await server.register(secureContext)
+  }
 
   await server.register([requestLogger, sessionCache, nunjucksConfig])
 

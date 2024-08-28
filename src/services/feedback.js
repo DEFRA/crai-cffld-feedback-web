@@ -47,7 +47,7 @@ function formatFeedback(feedback) {
 function formatMetadata(metadata) {
   return {
     ...metadata,
-    dateTime: format(new Date(metadata.id), dateFormat)
+    createdOn: format(new Date(metadata.createdOn), dateFormat)
   }
 }
 

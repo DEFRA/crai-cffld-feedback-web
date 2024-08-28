@@ -1,4 +1,4 @@
-import { uploadFeedback } from '~/src/repos/feedback'
+import { uploadFeedbackFile } from '~/src/server/common/helpers/feedback-api-client'
 
 /**
  * A GDS styled example home page controller.
@@ -11,7 +11,7 @@ const feedbackUploadController = {
   postHandler: async (request, h) => {
     const { feedbackUpload } = request.payload
 
-    await uploadFeedback(feedbackUpload._data)
+    await uploadFeedbackFile(feedbackUpload._data)
 
     return h.redirect('/feedback/upload/status')
   }

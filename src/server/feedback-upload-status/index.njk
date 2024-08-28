@@ -23,14 +23,20 @@
         <tbody class="govuk-table__body">
           {% for f in model.feedback %}
             <tr class="govuk-table__row">
-              <td class="govuk-table__cell">{{ f.dateTime }}</td>
+              <td class="govuk-table__cell">{{ f.createdOn }}</td>
               <td class="govuk-table__cell">{{ f.totalRedacted }}</td>
               <td class="govuk-table__cell">{{ f.totalFeedback }}</td>
               <td class="govuk-table__cell">
-                {% if f.status == "UPLOADED" %}
-                  <strong class="govuk-tag govuk-tag--green">Uploaded</strong>
-                {% elif f.status == "PROCESSING" %}
-                  <strong class="govuk-tag govuk-tag--blue">Processing</strong>
+                {% if f.status == "RECEIVED" %}
+                  <strong class="govuk-tag govuk-tag--grey">Received</strong>
+                {% elif f.status == "UPLOADED" %}
+                  <strong class="govuk-tag govuk-tag--purple">Uploaded</strong>
+                {% elif f.status == "TRIAGED" %}
+                  <strong class="govuk-tag govuk-tag--green">Triaged</strong>
+                {% elif f.status == "TRIAGING" %}
+                  <strong class="govuk-tag govuk-tag--blue">Triaging</strong>
+                {% elif f.status == "WARNING" %}
+                  <strong class="govuk-tag govuk-tag--yellow">Warning</strong>
                 {% elif f.status == "FAILED" %}
                   <strong class="govuk-tag govuk-tag--red">Failed</strong>
                 {% endif %}

@@ -152,6 +152,14 @@ const config = convict({
       default: 'http://localhost:3001/feedback',
       env: 'FEEDBACK_API_URL'
     }
+  },
+  aws: {
+    region: {
+      doc: 'AWS Region',
+      format: String,
+      default: 'eu-west-2',
+      env: 'AWS_REGION'
+    }
   }
 })
 
